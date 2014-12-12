@@ -49,3 +49,5 @@ are having problems, or to a previous tag to see all the differences.
 ## Bon Voyage
 
 Hope you enjoy the tutorials and happy sailing!
+
+You can start with the first [TUTORIAL01.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL01.md)
