@@ -5,7 +5,7 @@
 I wanted a "rails-like" fast prototyping framework for backend work, and liked the
 idea of using Javascript and Node.js as a learning experience.
 
-Sails is designed for creating ReSTful apis quickly.  While one can create websites
+Sails is designed for creating RESTful apis quickly.  While one can create websites
 using Sails, the focus is clearly not on display, and by not trying to solve this,
 Sails can specialize.
 
@@ -117,7 +117,7 @@ do anything useful, we have a web server.
 ## Creating the first model and controller
 
 Sails comes with some rudimentary generator plugins, which can be executed from the CLI.
-We'll create a user model and controller to implement the CRUD ReST methods.
+We'll create a user model and controller to implement the CRUD REST methods.
 
 ```ShellSession
 # We must be in the top-level-directory for the project to execute generator commands
@@ -531,7 +531,7 @@ mysql> SELECT * FROM user;
 
 ## Automatic Routes
 
-Despite the small amount of work we've done, we already have a reasonable set of ReST calls
+Despite the small amount of work we've done, we already have a reasonable set of REST calls
 which are defined on the User model.  We have both RESTful routes (GET, POST, DELETE) and
 shortcut routes.  Shortcut routes are utility routes where GET is the only verb, and what
 might go into a POST body is concatenated into the query parameters.  This is great for
