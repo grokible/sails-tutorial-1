@@ -16,4 +16,36 @@ were made.
 
 Each successive tutorial is located in TUTORIALS/TUTORIALXX.md.
 
-Hope you enjoy them and happy sailing!
+## Finished Tutorial State
+
+At the end of each tutorial, the project will have incrmental changes reflecting
+the tutorial.  The easiest way to get those changes is to look at the tags:
+
+```ScriptSession
+$ git pull
+$ git tag --list
+tutorial.01
+tutorial.01.1
+tutorial.01.2
+...
+```
+
+The tag you should get is the latest one with the same number as the tutorial.
+For example, in the tag list above, if you want the state at the end of TUTORIAL01.md,
+you should get the tag "tutorial.01.2".  The minor number reflects a minor update
+which is usually a documentation or tiny code fix.  In the listing of tags above
+it shows I updated the tutorial twice (with minor fixes).
+
+To make a new branch from the tag "tutorial.01.2" you can do:
+
+```ScriptSession
+$ git checkout -b new_branch_name tutorial.01.2
+```
+
+You can then compare the results of this branch to your existing branch if you
+are having problems, or to a previous tag to see all the differences.
+
+
+## Bon Voyage
+
+Hope you enjoy the tutorials and happy sailing!
