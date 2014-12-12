@@ -142,11 +142,11 @@ Let's take a look at the User.js file.
 
 ```Javascript
 /**
-* User.js
-*
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
-*/
+ * User.js
+ *
+ * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @docs        :: http://sailsjs.org/#!documentation/models
+ */
 
 module.exports = {
 
@@ -678,7 +678,7 @@ Type the following URL into your browser:
 # Type this URL into your browser address bar
 http://localhost:1337/user/update/1?email=rogerbush8@yahoo.com
 
-# Here's the result I got.
+# Here is the result I got.
 {
     "firstName": "Roger",
     "lastName": "Bush",
@@ -750,11 +750,11 @@ So now we are ready to update our api/models/User.js file.  The finished product
 
 ```Javascript
 /**
-* User.js
-*
-* @description :: User account information
-* @docs        :: http://sailsjs.org/#!documentation/models
-*/
+ * User.js
+ *
+ * @description :: User account information
+ * @docs        :: http://sailsjs.org/#!documentation/models
+ */
 
 module.exports = {
 
@@ -815,7 +815,7 @@ mysql> SHOW INDEXES FROM user;
 Now let's try to cause some mischief by adding a duplicate email, missing fields, etc:
 
 ```ShellSession
-# Let's try duplicate email
+# Let us try duplicate email
 # Type URL into your browser address bar
 http://localhost:1337/user/create?firstName=Roger&lastName=Bush&email=rogerbush8@yahoo.com
 
