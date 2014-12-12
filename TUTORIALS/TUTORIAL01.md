@@ -687,6 +687,7 @@ http://localhost:1337/user/update/1?email=rogerbush8@yahoo.com
     "createdAt": "2014-12-12T02:20:48.000Z",
     "updatedAt": "2014-12-10T15:10:17.370Z",
 }
+```
 
 Note that the field was added, and the updatedAt timestamp was also changed.
 
