@@ -80,7 +80,7 @@ module.exports.connections = {
     user: 'YOUR_POSTGRES_USER',
     password: 'YOUR_POSTGRES_PASSWORD',
     database: 'YOUR_POSTGRES_DB'
-  }
+  },
 
 
   /***************************************************************************
@@ -88,5 +88,14 @@ module.exports.connections = {
   * More adapters: https://github.com/balderdashy/sails                      *
   *                                                                          *
   ***************************************************************************/
+
+  mysql1: {
+    adapter: 'sails-mysql',
+    host: '127.0.0.1',
+    user: 'webapp',
+    password: 'pa55word',
+    database: 'sails'
+  }
+
 
 };

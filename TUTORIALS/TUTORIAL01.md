@@ -20,14 +20,25 @@ like a better fit for my personal taste.
 It's been my observation that the best frameworks are those that are designed out of
 necessity, as they tend to be very practical and sparse.
 
-The author of Sails, Mike McNeil compares Sails to Meteor here:
-
-http://stackoverflow.com/questions/22202286/sails-js-vs-meteor-what-are-the-advantages-of-both
+The author of Sails, Mike McNeil compares [Sails to Meteor](http://stackoverflow.com/questions/22202286/sails-js-vs-meteor-what-are-the-advantages-of-both).
 
 I also appreciate the author's desire for a pure Node.js implementation of everything,
 in that if one wants to learn reasonable idiomatic Javascript and Node.js through osmosis,
 going through the code provides that benefit as well (not to say this isn't true for
 Meteor, but we will assume it is true for Sails based on the stackoverflow article).
+
+## Tutorial Overview
+
+The first thing we are going to try is to make a simple User account class and handle
+all of the real things we'd need to handle to use this for login and authentication.
+It's a pretty simple example, but one that should introduce us to many of the basic
+concepts.  Once that's done, we'll take a look around to see what to achieve next.
+
+The tutorials are arranged in bite-sized chunks, and each TUTORIALXX.md file
+corresponds to the sequence of tutorials.  I'll check-in the finished solution to
+what we try to achieve in each tutorial.  These will be tagged or otherwise
+available by looking at the checkin history and pulling the correct version.
+
 
 ## Installing Sails
 
@@ -114,7 +125,7 @@ We'll create a user model and controller to implement the CRUD ReST methods.
 
 $ cd sails-tutorial-1
 
-$ sails generate model user firstName:string lastName:string email:string
+$ sails generate model user firstName:string lastName:string
 $ sails generate controller user
 
 # We just created two files in the api subdirs
@@ -130,7 +141,7 @@ User.js
 Let's take a look at the User.js file.
 
 ```Javascript
-/**                                                                                                                                    
+/**
 * User.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
@@ -143,9 +154,7 @@ module.exports = {
 
     firstName : { type: 'string' },
 
-    lastName : { type: 'string' },
-
-    email : { type: 'string' }
+    lastName : { type: 'string' }
 
   }
 };
@@ -278,13 +287,12 @@ for these tutorials.
 
 ```ShellSession
 # Type this URL into your browser address bar
-http://localhost:1337/user/create?firstName=Roger&lastName=Bush&email=rogerbush8@yahoo.com
+http://localhost:1337/user/create?firstName=Roger&lastName=Bush
 
 # Response I got:
 {
     firstName: "Roger",
     lastName: "Bush",
-    email: "rogerbush8@yahoo.com",
     createdAt: "2014-12-10T15:10:17.370Z",
     updatedAt: "2014-12-10T15:10:17.370Z",
     id: 1
@@ -297,12 +305,14 @@ http://localhost:1337/user/1
 {
     firstName: "Roger",
     lastName: "Bush",
-    email: "rogerbush8@yahoo.com",
     createdAt: "2014-12-10T15:10:17.370Z",
     updatedAt: "2014-12-10T15:10:17.370Z",
     id: 1
 }
 ```
+
+Note that any additional parameters we supply to the shortcut routes are silently
+ignored.
 
 ## Sensible defaults and automatic routes
 
@@ -402,6 +412,13 @@ my project directory, but globally should be fine too).
 ```ShellSession
 # Make sure your working directory is sails-tutorial-1
 $ npm install sails-mysql
+sails-mysql@0.10.8 node_modules/sails-mysql
+├── waterline-errors@0.10.1
+├── waterline-cursor@0.0.5
+├── waterline-sequel@0.0.19
+├── async@0.9.0
+├── lodash@2.4.1
+└── mysql@2.3.2 (require-all@0.0.8, bignumber.js@1.4.0, readable-stream@1.1.13)
 ```
 
 Finally, we need to startup mysql, create a new database, create a user, and grant
@@ -432,24 +449,56 @@ Now lets restart sails.  You can stop it by doing CTRL-C.
 $ sails lift
 ```
 
-Now we will test creating a User record through the browser, which will test
-everything.  Sails will make a connection with the database, create a new
-User table (since one doesn't exist), and write a record into it.  If we've
-done anything wrong, it will complain vociferously here.  The way Sails
-currently complains is to dump a stack trace and exit.  It typically takes
-a little detective work to figure out what is wrong (but at this stage
-it's likely to be something simple, so just start by double checking
-everything).
+Since we have selected "migrate: alter," Sails will attempt to do an automatic
+data migration on startup.  It does this by examining our User table schema, and comparing
+it to the User model (in models/User.js), and then making changes which more or less
+preserves our existing data.
+
+We'll see that it is not as conservative with our data as we might like in certain important cases.
+
+Note that if we've done anything wrong, Sails will complain here by dumping a stack
+trace to the console and exiting.  It typically takes a little detective work to figure out what is
+wrong (but at this stage it's likely to be something simple, so just start by double
+checking everything).
+
+Let's check the database.  Note that if we show tables we can see that user has
+been created.  Let's also see what the created schema looks like.
+
+```ShellSession
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_sails |
++-----------------+
+| user            |
++-----------------+
+1 row in set (0.00 sec)
+
+SHOW CREATE TABLE user;
+...
+| user  | CREATE TABLE `user` (
+  `firstName` varchar(255) DEFAULT NULL,
+  `lastName` varchar(255) DEFAULT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
+...
+0 row in set (0.00 sec)
+```
+
+Now let's add a record using a "shortcut route," one of the automatic types of routes that
+Sails creates for us automatically (when we have a model and a controller).
+
 
 ```ShellSession
 # Type this URL into your browser address bar
-http://localhost:1337/user/create?firstName=Roger&lastName=Bush&email=rogerbush8@yahoo.com
+http://localhost:1337/user/create?firstName=Roger&lastName=Bush
 
 # Response I got:
 {
     firstName: "Roger",
     lastName: "Bush",
-    email: "rogerbush8@yahoo.com",
     createdAt: "2014-12-10T17:11:19.000Z",
     updatedAt: "2014-12-10T17:11:19.000Z",
     id: 1
@@ -462,7 +511,6 @@ http://localhost:1337/user/1
 {
     firstName: "Roger",
     lastName: "Bush",
-    email: "rogerbush8@yahoo.com",
     createdAt: "2014-12-10T17:11:19.000Z",
     updatedAt: "2014-12-10T17:11:19.000Z",
     id: 1
@@ -472,25 +520,12 @@ http://localhost:1337/user/1
 Let's check the database:
 
 ```ShellSession
-mysql> SHOW CREATE TABLE user;
-...
-| user  | CREATE TABLE `user` (
-  `firstName` varchar(255) DEFAULT NULL,
-  `lastName` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 |
-...
-1 row in set (0.00 sec)
 mysql> SELECT * FROM user;
-+-----------+----------+----------------------+----+---------------------+---------------------+
-| firstName | lastName | email                | id | createdAt           | updatedAt           |
-+-----------+----------+----------------------+----+---------------------+---------------------+
-| Roger     | Bush     | rogerbush8@yahoo.com |  1 | 2014-12-10 09:11:19 | 2014-12-10 09:11:19 |
-+-----------+----------+----------------------+----+---------------------+---------------------+
++-----------+----------+----+---------------------+---------------------+
+| firstName | lastName | id | createdAt           | updatedAt           |
++-----------+----------+----+---------------------+---------------------+
+| Roger     | Bush     |  1 | 2014-12-10 09:11:19 | 2014-12-10 09:11:19 |
++-----------+----------+----+---------------------+---------------------+
 1 row in set (0.00 sec)
 ```
 
@@ -507,6 +542,153 @@ The implementation may be selectively overridden by adding a corresponding metho
 the controller.  Automatic routes may be turned off for the application using configuration in
 config/blueprint.js.  More information on blueprints can be found in the
 [sails blueprint api reference](http://sailsjs.org/#/documentation/reference/blueprint-api).
+
+
+## Adding a field
+
+Adding a field is a common operation, and is fairly simple.  Note that we would like to
+add an email field to the User.  Since adding fields is the most common change we will
+make to a db schema, we should take a little time to understand how it works.
+
+To add a field, we will add a property directly in models/User.js:
+
+```Javascript
+module.exports = {
+
+  attributes: {
+
+    firstName : { type: 'string' },
+
+    lastName : { type: 'string' },
+
+    // Add this line, and the comma ^ up here
+    email : { type: 'string' }
+  }
+};
+
+```
+
+Now restarting sails should add the column.
+
+```ScriptSession
+$ sails lift
+```
+
+Checking the database shows the column is added, and the data is preserved.
+
+```ShellSession
+mysql> SELECT * FROM user;
++-----------+----------+-------+--------------------------+---------------------+
+| firstName | lastName | email | id | createdAt           | updatedAt           |
++-----------+----------+-------+--------------------------+---------------------+
+| Roger     | Bush     | NULL  |  1 | 2014-12-10 09:11:19 | 2014-12-10 09:11:19 |
++-----------+----------+-------+--------------------------+---------------------+
+1 row in set (0.00 sec)
+```
+
+Note that adding a field works well because all of the fields are NULL-able by
+default, when created by the sails-mysql adapter.  Thus there is no need to specify
+a default in the database.  In most cases, no default can be given anyway, as the
+opportunity to gather the data has passed, and thus NULL is the most reasonable
+value for the data.  Also note that updatedAt does not change.
+
+
+## Deleting fields
+
+Let's try removing the email field from models/User.js, and running sails lift to see what happens.
+
+```Javascript
+module.exports = {
+
+  attributes: {
+
+    firstName : { type: 'string' },
+
+    lastName : { type: 'string' }
+
+  }
+};
+
+```
+
+Let's restart sails:
+
+```ScriptSession
+$ sails lift
+```
+
+And examine the db:
+
+```ScriptSession
+mysql> select * from user;
++-----------+----------+----+---------------------+---------------------+
+| firstName | lastName | id | createdAt           | updatedAt           |
++-----------+----------+----+---------------------+---------------------+
+| Roger     | Bush     |  1 | 2014-12-11 18:20:48 | 2014-12-11 18:20:48 |
++-----------+----------+----+---------------------+---------------------+
+1 row in set (0.00 sec)
+```
+
+Note that the email column has been dropped, along with any data it had.
+Fortunately we had no data.  From a prototyping perspective this makes sense
+as it is quick and easy.
+
+However, once we start adding other developers, and the possibility of a production
+environment, we start running into trouble.  The reason for this is that data, starts to
+matter a lot, once you have any that you care about.
+
+Consider the following scenario:
+
+* Developer comments out an attribute in the model file temporarily and checks in the file.
+* Other developers do a git pull, and sails lift.
+* Sadness ensues as the other developers realize their test data is deleted.
+
+It would be even worse if somehow code got into production that silently deleted things.
+
+This is why, typically, it is better to mutate your schema using a mechanism like
+migrations.  For a little bit more trouble, we can easily change our schema, as well
+as retain control over when those changes are done (and perhaps even be able to roll
+them back).  Changing schema in this way is fairly standard and takes the guesswork
+out of what is happening automatically.
+
+We'll look at migrations, which are not a standard part of Sails, in a future installment.
+
+For now, just realize that a mechanism like migrations is probably the way to go right
+from the get-go so that you don't get lazy and accidentally have "migrate: alter"
+wreaking havoc.  It's slightly more complex, but we start out with the mindset of
+deploying to production.
+
+Secondly, changing/deleting fields happens automatically, with "migrate: alter", and it
+is a little unconservative in its current approach (although we've been warned, the
+authors did mark it experimental).
+
+##  Get it back
+
+Go ahead and go through the steps to add the email column back in.  Verify that
+the column gets added once again after running sails lift.
+
+##  Update
+
+Now that we have an email field, let's use another convenience route to surgically
+update the email field.
+
+Type the following URL into your browser:
+
+```ShellSession
+# Type this URL into your browser address bar
+http://localhost:1337/user/update/1?email=rogerbush8@yahoo.com
+
+# Here's the result I got.
+{
+    "firstName": "Roger",
+    "lastName": "Bush",
+    "email": "rogerbush8@yahoo.com",
+    "id": 1,
+    "createdAt": "2014-12-12T02:20:48.000Z",
+    "updatedAt": "2014-12-10T15:10:17.370Z",
+}
+
+Note that the field was added, and the updatedAt timestamp was also changed.
 
 
 ##  Attributes and simple data constraints
@@ -581,7 +763,7 @@ module.exports = {
 
     lastName : { type: 'string', required: true },
 
-    email : { type: 'string', unique: true, required: true, email: true }
+    email : { type: 'string', required: true, unique: true, email: true }
 
   }
 };
@@ -592,6 +774,42 @@ And we should restart sails and test it.
 ```ShellSession
 $ sails lift
 ```
+
+Note that in general, no changes will be made to the schema to support validations.  This is
+because they are done, mostly, in code in Sails.  Note, in particular, that the table schema
+has not changed due to the required fields (they are still NULL-able):
+
+```ShellSession
+mysql> SHOW CREATE TABLE user;
+...
+| user  | CREATE TABLE `user` (
+  `firstName` varchar(255) DEFAULT NULL,
+  `lastName` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 |
+```
+
+Most validations can be done using Sails code (and are done via Validator).  The one exception
+to this is the unique property, which is a global property over the table.  Unique is achieved
+in the sails-mysql adapter by adding a uniqueness constraint to the table schema.  In a NoSQL
+database this might simply be ignored (YMMV).
+
+We can see it added here:
+
+```ShellSession
+mysql> SHOW INDEXES FROM user;
+...
+| user  |          0 | PRIMARY  |            1 | id          | A         |           1 |     NULL | NULL   |      | BTREE      |         |               |
+| user  |          0 | email    |            1 | email       | A         |           1 |     NULL | NULL   | YES  | BTREE      |         |               |
+...
+2 rows in set (0.00 sec)
+```
+
 
 Now let's try to cause some mischief by adding a duplicate email, missing fields, etc:
 
@@ -657,53 +875,6 @@ unnecessarily complicated.
 Note I am just nitpicking though.  Sails did a fantastic job overall as it made this
 extremely simple.  Note that it did not add a "NOT NULL" constraint to the database, prefering
 to handle this sort of thing in the application - the right thing to do, IMHO.
-
-## Adding fields
-
-Adding a field is a common operation, and is fairly simple.  The reason this works reasonably
-well for the sails-mysql adapter, is that fields are all defined NULL-able.  What this means
-is that when we add another column, and data pre-exists, MySQL can set that field as NULL in the
-old records.  Otherwise we would have to specify a default value for the field.  Specifying a
-default value where there isn't a sensible default makes no sense.  For example, if we
-added the middleName field, having the default of "" (empty string) is non-sensical.  The
-fact is, we don't have that data, and therefore NULL is the correct choice from a data
-standpoint.
-
-So by the sails-mysql adapter choosing to not use database features, such as column
-validation NOT NULL, we gain flexibility.
-
-## Changing/Deleting fields
-
-We are not going to try this as it is simple, and quite destructive.  From a development
-and prototyping perspective, it is reasonable and simple to use the "migrate: alter" option.
-However, once we start adding other developers, and the possibility of a production
-environment, we start running into trouble.  The reason for this is that data, starts to
-matter a lot, once you have any that you care about.
-
-Consider the following scenario:
-
-* Developer comments out an attribute in the model file temporarily and checks in the file.
-* Other developers do a git pull, and sails lift.
-* Sadness ensues as the other developers realize their test data is deleted.
-
-It would be even worse if somehow code got into production that silently deleted things.
-
-This is why, typically, it is better to mutate your schema using a mechanism like
-migrations.  For a little bit more trouble, we can easily change our schema, as well
-as retain control over when those changes are done (and perhaps even be able to roll
-them back).  Changing schema in this way is fairly standard and takes the guesswork
-out of what is happening automatically.
-
-We'll look at migrations, which are not a standard part of Sails, in a future installment.
-
-For now, just realize that a mechanism like migrations is probably the way to go right
-from the get-go so that you don't get lazy and accidentally have "migrate: alter"
-wreaking havoc.  It's slightly more complex, but we start out with the mindset of
-deploying to production.
-
-Secondly, changing/deleting fields happens automatically, with "migrate: alter", and it
-is a little unconservative in its current approach (although we've been warned, the
-authors did mark it experimental).
 
 
 ## Convention over configuration
