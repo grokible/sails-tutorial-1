@@ -129,8 +129,8 @@ You'll learn:
 * Defining Sails model schema and the mapping to MySQL database column attributes.  Interacting
   with the MySQL database, and debugging.  Dealing with schema changes.
 
-To Start: just follow the Tutorial:  [TUTORIAL01.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL01.md).
-Finished Tutorial State: `git checkout -b new_branch_name tutorial.01.2`
+To Start: just follow [TUTORIAL01.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL01.md).
+To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.01.2`
 
 ### Tutorial 02
 
@@ -160,9 +160,8 @@ You'll learn:
 * Exposure to some high-quality, low-level Javascript libraries such as Lodash, Express, Bluebird,
   Joi, Waterline, Bcrypt.
 
-To Start: `git checkout -b new_branch_name tutorial.01.2`
-and then follow [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
-Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.1`
+To Start: `git checkout -b new_branch_name tutorial.01.2` and then follow [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
+To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.2`
 
 ## Bon Voyage
 
