@@ -6,8 +6,10 @@
 
 var Promise = require ('bluebird');
 var BCrypt = Promise.promisifyAll (require ('bcrypt'));
-var ControllerOut = require ('Local/ControllerOut');
 var Joi = require ('joi');
+
+var ControllerOut = require ('Local/ControllerOut');
+var StringUtil = require ('Local/stringutil.js');
 
 var createSchema = Joi.object ().keys ({
     firstName: Joi.string ().alphanum ().max (30).required (),
@@ -19,17 +21,21 @@ var createSchema = Joi.object ().keys ({
 module.exports = {
 
     /**
-     * Create User.  Must have unique email.  Password is stored in encrypted format.
+     * Create User.  Must have unique email.  Password is hashed prior to storage.
      * @function create
+     * @arg {string} firstName will have lead/trail ws trimmed and upcase first
+     * @arg {string} lastName will have lead/trail ws trimmed and upcase first
      * @arg {string} password Plaintext password for user account.
      * @arg {string} email Email must be unique (is used as login for account).
      * @returns {string} json User or Standard Error
-     * @todo add email handling and property
+     * @see createSchema for parameter validation
      */
     create: function (req, res) {
         try {
             var co = new ControllerOut (res)
             var pm = req.params.all ()
+            pm ['firstName'] = StringUtil.cleanProperName (pm ['firstName'])
+            pm ['lastName'] = StringUtil.cleanProperName (pm ['lastName'])
 
             // Delete added "id" field from params
             delete pm ['id']

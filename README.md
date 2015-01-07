@@ -161,7 +161,7 @@ You'll learn:
   Joi, Waterline, Bcrypt.
 
 To Start: `git checkout -b new_branch_name tutorial.01.2` and then follow [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
-To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.2`
+To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.3`
 
 ## Bon Voyage
 
