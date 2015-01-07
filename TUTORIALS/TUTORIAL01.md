@@ -157,7 +157,7 @@ module.exports = {
     lastName : { type: 'string' }
 
   }
-};
+}
 ```
 
 And now the UserController.js file.
@@ -172,7 +172,7 @@ And now the UserController.js file.
 
 module.exports = {
   
-};
+}
 ```
 
 ## Let's start the application again
@@ -564,7 +564,7 @@ module.exports = {
     // Add this line, and the comma ^ up here
     email : { type: 'string' }
   }
-};
+}
 
 ```
 
@@ -607,7 +607,7 @@ module.exports = {
     lastName : { type: 'string' }
 
   }
-};
+}
 
 ```
 
@@ -711,8 +711,8 @@ For basic validation we will want to make sure that firstName and lastName are v
 email is a valid email, and further that email is unique.
 
 The attributes of a model are described in the [Sails ORM Attributes](http://sailsjs.org/#/documentation/concepts/ORM/Attributes.html).
-Attributes for the MySQL datastore, map to columns in the table schema.  We can use the 'unique' property of the attribute
-to handle uniqueness of the email.
+Attributes for the MySQL datastore, map to columns in the table schema.
+We can use the 'unique' property of the attribute to handle uniqueness of the email.
 
 Note in the current online documentation, there is an example that shows type=email, which
 does not seem like a fundamental type.  For now, we are going to avoid using this, and instead use a validation
@@ -767,7 +767,7 @@ module.exports = {
     email : { type: 'string', required: true, unique: true, email: true }
 
   }
-};
+}
 ```
 
 And we should restart sails and test it.
@@ -905,3 +905,17 @@ made changes to .js files, but these were acting as config files).  In the
 next tutorial, we'll add specific code to our controller and show how to
 incrementally evolve and override behavior to get exactly what we want.
 
+Here are some of the things we've learned:
+
+* Installing Sails.js and optional libraries using npm.
+* Starting and stopping Sails.js and the bootstrap process.
+* Modifying Sails configuration, and an intro to the global config object
+  which represents the bootstrapped Sails system.  Important configuration
+  such as connectors (mysql) and migration type.
+* Using Sails model and controller generator scripts to create modules with stub functions.
+* Using blueprint convenience routes.
+* Using the sails-disk and sails-mysql persistent stores.
+* Defining Sails model schema and the mapping to MySQL database column attributes.  Interacting
+  with the MySQL database, and debugging.  Dealing with schema changes.
+
+  

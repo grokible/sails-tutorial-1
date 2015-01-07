@@ -66,7 +66,9 @@ config/local.js
 # 
 ################################################
 
-node_modules
+node_modules/*
+!node_modules/Local
+
 bower_components
 
 
@@ -116,3 +118,13 @@ npm-debug.log
 nbproject
 .idea
 .node_history
+
+################################################
+# Documentation 
+# 
+# Allow checkin of markdown (for GitHub), but
+# ignore all other docs
+################################################
+
+doc/*
+!doc/markdown
