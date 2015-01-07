@@ -1774,9 +1774,6 @@ As usual, run the test using `$ npm test`.  You should see it passes.
 
 ## Fixing the Proper Names using stringutil.cleanProperName
 
-
-## Enabling Persistence on our Create Endpoint, and fixing the Proper Names
-
 Now that we've tested our function, we must require it and use it on the parameters.
 
 ```Javascript
@@ -1788,6 +1785,8 @@ Now that we've tested our function, we must require it and use it on the paramet
     pm ['lastName'] = StringUtil.cleanProperName (pm ['lastName'])
 ```
 
+## Enabling Persistence on our Create Endpoint, and fixing the Proper Names
+
 We left this disabled for easy testing (so we wouldn't pollute the database with junk records).
 We will now enable this:
 ```Javascript
@@ -1797,7 +1796,7 @@ We will now enable this:
         .then (function (hash) { pm ['password'] = hash; return User.create (pm) })
 ```
 
-## The final UserController.js
+## UserController.js (final version)
 ```Javascript
 /**
  * User controller logic for REST service.
