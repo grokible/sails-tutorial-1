@@ -115,6 +115,9 @@ are having problems, or to a previous tag to see all the differences.
 
 ### Tutorial 01
 
+Take a look at [TUTORIAL01.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL01.md).
+You'll learn:
+
 * Installing Sails.js and optional libraries using npm.
 * Starting and stopping Sails.js and the bootstrap process.
 * Modifying Sails configuration, and an intro to the global config object
@@ -126,7 +129,13 @@ are having problems, or to a previous tag to see all the differences.
 * Defining Sails model schema and the mapping to MySQL database column attributes.  Interacting
   with the MySQL database, and debugging.  Dealing with schema changes.
 
+To Start: just follow the Tutorial:  [TUTORIAL01.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL01.md).
+Finished Tutorial State: `git checkout -b new_branch_name tutorial.01.2`
+
 ### Tutorial 02
+
+Take a look at [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
+You'll learn:
 
 * Use declarative parameter validation for controllers via the Joi library.  This gives us full control over
   error handling and preparing parameters before updating our models, which is crucial.
@@ -151,8 +160,9 @@ are having problems, or to a previous tag to see all the differences.
 * Exposure to some high-quality, low-level Javascript libraries such as Lodash, Express, Bluebird,
   Joi, Waterline, Bcrypt.
 
-
-
+To Start: `git checkout -b new_branch_name tutorial.01.2`
+and then follow [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
+Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.1`
 
 ## Bon Voyage
 
