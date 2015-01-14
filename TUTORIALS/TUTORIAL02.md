@@ -1334,7 +1334,8 @@ $ sudo npm install joi
 
 Joi lets us create a "schema" which defines all of the legal sets of parameters
 allowed for some operation, in our case, calling our create REST endpoint.
-The fluent API is straightforward - each additional chained call is an additional
+The [Joi fluent API is straightforward, and well-documented](https://www.npmjs.com/package/joi) -
+each additional chained call is an additional
 requirement a parameter must meet.  Also, for a call to validate (), there are
 certain defaults that may be overridden by passing in options.  We'll just use
 the defaults for now which will have the effect of only allowing what we
@@ -1964,7 +1965,24 @@ Areas which are next to explore include:
 We'll be doing all of these things in the next tutorials.
 
 
+## References
 
-
-
-
+* [Sails blueprint api reference](http://sailsjs.org/#/documentation/reference/blueprint-api)
+* [Sails Custom Routing docs](http://sailsjs.org/#/documentation/concepts/Routes/RouteTargetSyntax.html)
+* [Express API](http://expressjs.com/api.html)
+* [Blog post on better abstractions, e.g. Promises](http://jeditoolkit.com/2012/04/26/code-logic-not-mechanics.html#post)
+* [Futures and Promises, Wikipedia](http://en.wikipedia.org/wiki/Futures_and_promises).
+* [Bluebird Promises, GitHub](https://github.com/petkaantonov/bluebird/blob/master/API.md)
+* [Blog Post comparing Async Library to Bluebird](http://spion.github.io/posts/why-i-am-switching-to-promises.html)
+* [Sails Response Object docs](http://sailsjs.org/#/documentation/reference/res)
+* [Express Response Object docs](http://expressjs.com/3x/api.html)
+* [JSDoc documentation](http://usejsdoc.org/)
+* [Detailed sails.config reference](http://sailsjs.org/#/documentation/reference/sails.config)
+* [Introduction to Waterline](http://sailsjs.org/#/documentation/concepts/ORM)
+* [Github Waterline project docs](https://github.com/balderdashy/waterline-docs).
+* [Waterline Queries](https://github.com/balderdashy/waterline-docs/blob/master/query.md)
+* [Waterline Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/query-methods.md)
+* [Waterline query language docs](https://github.com/balderdashy/waterline-docs/blob/master/query-language.md)
+* [Mocha Testing Framework docs](http://mochajs.org/)
+* [Joi Validation Library API](https://www.npmjs.com/package/joi)
+* [NPM script field documentation](https://docs.npmjs.com/misc/scripts)

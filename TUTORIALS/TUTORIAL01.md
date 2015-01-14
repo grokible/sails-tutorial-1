@@ -27,6 +27,16 @@ in that if one wants to learn reasonable idiomatic Javascript and Node.js throug
 going through the code provides that benefit as well (not to say this isn't true for
 Meteor, but we will assume it is true for Sails based on the stackoverflow article).
 
+I glanced over the information for Meteor, and it is a very different type of
+framework that seems to be aimed at rapid application construction using some
+of its own paradigms.  In particular, it seems to be attempting to model the
+declarative, two-binding style of UI/model updating popularized by front-end
+frameworks like Angular.  It takes this type of interaction and pushes it even
+deeper down the stack, and into the persistence layer, and even the messaging
+protocols.  This is a very different model from most frameworks, which has it's pros
+and cons.  Sails seems much more tuned to backend services, especially since,
+out-of-the-box it has no rendering/template engine.
+
 ## Tutorial Overview
 
 The first thing we are going to try is to make a simple User account class and handle
@@ -107,7 +117,7 @@ stack trace with the thrown exception.
 Now point our web browser to:
 
 ```ShellSession
-http://localhost:1337/
+http:/localhost:1337/
 ```
 
 You should see a homepage with basic Sails information.  So at this point, even though it doesn't
@@ -744,6 +754,10 @@ are not going to want to define a type just for one model (but it's useful to kn
 experimentation).  Also, it's unfortunate that these in model file custom validations are called "types" since that name
 refers to the underlying data type for the attribute.
 
+Note that validations just prior to persisting in the database are of limited value.  We really need to do these
+validations on the incoming parameters.  We'll see how to do REST parameter validation in TUTORIAL02.
+
+
 ## Updated User.js
 
 So now we are ready to update our api/models/User.js file.  The finished product should be this:
@@ -918,4 +932,15 @@ Here are some of the things we've learned:
 * Defining Sails model schema and the mapping to MySQL database column attributes.  Interacting
   with the MySQL database, and debugging.  Dealing with schema changes.
 
-  
+## References
+
+* [Sails to Meteor Comparison](http://stackoverflow.com/questions/22202286/sails-js-vs-meteor-what-are-the-advantages-of-both).
+* [Sails docs on Models](http://sailsjs.org/#!documentation/models)
+* [Sails docs on Controllers](http://links.sailsjs.org/docs/controllers)
+* [Sails docs on ORM Attributes of Models](http://sailsjs.org/#/documentation/concepts/ORM/Attributes.html).
+* [Note on migration settings](http://sailsjs.org/#/documentation/concepts/ORM/model-settings.html?q=migrate)
+* [Sails blueprint api reference](http://sailsjs.org/#/documentation/reference/blueprint-api)
+* [Convention over Configuration, Wikipedia](http://en.wikipedia.org/wiki/Convention_over_configuration)
+* [Validator library](https://github.com/chriso/validator.js)
+* [Sails validations, not recommended](http://sailsjs.org/#/documentation/concepts/ORM/Validations.html)
+

@@ -132,6 +132,18 @@ You'll learn:
 To Start: just follow [TUTORIAL01.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL01.md).
 To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.01.2`
 
+**References:**
+
+* [Sails to Meteor Comparison](http://stackoverflow.com/questions/22202286/sails-js-vs-meteor-what-are-the-advantages-of-both).
+* [Sails docs on Models](http://sailsjs.org/#!documentation/models)
+* [Sails docs on Controllers](http://links.sailsjs.org/docs/controllers)
+* [Sails docs on ORM Attributes of Models](http://sailsjs.org/#/documentation/concepts/ORM/Attributes.html).
+* [Note on migration settings](http://sailsjs.org/#/documentation/concepts/ORM/model-settings.html?q=migrate)
+* [Sails blueprint api reference](http://sailsjs.org/#/documentation/reference/blueprint-api)
+* [Convention over Configuration, Wikipedia](http://en.wikipedia.org/wiki/Convention_over_configuration)
+* [Validator library](https://github.com/chriso/validator.js)
+* [Sails validations, not recommended](http://sailsjs.org/#/documentation/concepts/ORM/Validations.html)
+
 ### Tutorial 02
 
 Take a look at [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
@@ -162,6 +174,29 @@ You'll learn:
 
 To Start: `git checkout -b new_branch_name tutorial.01.2` and then follow [TUTORIAL02.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL02.md).
 To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.5`
+
+**References:**
+
+* [Sails blueprint api reference](http://sailsjs.org/#/documentation/reference/blueprint-api)
+* [Sails Custom Routing docs](http://sailsjs.org/#/documentation/concepts/Routes/RouteTargetSyntax.html)
+* [Express API](http://expressjs.com/api.html)
+* [Blog post on better abstractions, e.g. Promises](http://jeditoolkit.com/2012/04/26/code-logic-not-mechanics.html#post)
+* [Futures and Promises, Wikipedia](http://en.wikipedia.org/wiki/Futures_and_promises).
+* [Bluebird Promises, GitHub](https://github.com/petkaantonov/bluebird/blob/master/API.md)
+* [Blog Post comparing Async Library to Bluebird](http://spion.github.io/posts/why-i-am-switching-to-promises.html)
+* [Sails Response Object docs](http://sailsjs.org/#/documentation/reference/res)
+* [Express Response Object docs](http://expressjs.com/3x/api.html)
+* [JSDoc documentation](http://usejsdoc.org/)
+* [Detailed sails.config reference](http://sailsjs.org/#/documentation/reference/sails.config)
+* [Introduction to Waterline](http://sailsjs.org/#/documentation/concepts/ORM)
+* [Github Waterline project docs](https://github.com/balderdashy/waterline-docs).
+* [Waterline Queries](https://github.com/balderdashy/waterline-docs/blob/master/query.md)
+* [Waterline Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/query-methods.md)
+* [Waterline query language docs](https://github.com/balderdashy/waterline-docs/blob/master/query-language.md)
+* [Mocha Testing Framework docs](http://mochajs.org/)
+* [Joi Validation Library API](https://www.npmjs.com/package/joi)
+* [NPM script field documentation](https://docs.npmjs.com/misc/scripts)
+
 
 ## Bon Voyage
 
