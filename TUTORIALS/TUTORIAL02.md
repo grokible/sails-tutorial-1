@@ -19,6 +19,7 @@ In this tutorial we will investigate how to:
   which can help our debugging efforts.
 * Use bluebird promises to greatly simplify our asynchronous code.
 * Learn basics of the Waterline ORM in conjunction with promises.
+* Learn basics of parameter validation with Joi library.
 * Use the `sails>` interactive console to experiment (REPL => faster experimentation!).
 * Setup a test/ directory structure for all of our unit tests and learn how to
   integrate a Mocha as an npm script (i.e. npm test).
@@ -1341,9 +1342,10 @@ certain defaults that may be overridden by passing in options.  We'll just use
 the defaults for now which will have the effect of only allowing what we
 specify.  Thus, extra arguments will be flagged.
 
-Note this does cause an immediate issue - Sails (Express?) adds an undefined
-"id" field to the request parameters.  We'll need to delete it or it will get
-flagged and throw an exception.
+Note this does cause an issue as we have accidentally copied an "id" parameter,
+which may be added by Express or Sails.  It's not a parameter from the incoming
+query parameters (it may be part of a base object).  We'll need to suppress the
+copying of it (or delete it) or it will get flagged and throw an exception.
 
 Here is our schema:
 ```Javascript
