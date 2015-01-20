@@ -1787,7 +1787,7 @@ that different.  The following changes were made:
 * The name and function of SailsControllerInterceptorSingleton no longer
   fit.  This seemed the case as we were thinking of this object to
   be a shared context object for all controller methods.  So we'll
-  change the name to `SailsControllerSingleton`.
+  change the name to `SailsControllerContext`.
 
 
 

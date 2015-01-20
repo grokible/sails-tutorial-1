@@ -11,7 +11,7 @@ var Joi = require ('joi');
 var StringUtil = require ('Local/stringutil.js');
 var Params = require ('Local/Params');
 
-var SailsControllerInterceptorSingleton = require ('Local/SailsControllerInterceptorSingleton');
+var SailsControllerContext = require ('Local/SailsControllerContext');
 
 var createSchema = Joi.object ().keys ({
     firstName: Joi.string ().alphanum ().max (30).required (),
@@ -20,7 +20,7 @@ var createSchema = Joi.object ().keys ({
     password: Joi.string ().regex (/\w{6,128}/).required ()
 })
 
-var ci = SailsControllerInterceptorSingleton ();
+var ci = SailsControllerContext ();
 
 module.exports = ci.intercept ({
     /**
