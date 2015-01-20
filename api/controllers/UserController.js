@@ -8,8 +8,10 @@ var Promise = require ('bluebird');
 var BCrypt = Promise.promisifyAll (require ('bcrypt'));
 var Joi = require ('joi');
 
-var ControllerOut = require ('Local/ControllerOut');
 var StringUtil = require ('Local/stringutil.js');
+var Params = require ('Local/Params');
+
+var SailsControllerInterceptorSingleton = require ('Local/SailsControllerInterceptorSingleton');
 
 var createSchema = Joi.object ().keys ({
     firstName: Joi.string ().alphanum ().max (30).required (),
@@ -18,8 +20,9 @@ var createSchema = Joi.object ().keys ({
     password: Joi.string ().regex (/\w{6,128}/).required ()
 })
 
-module.exports = {
+var ci = SailsControllerInterceptorSingleton ();
 
+module.exports = ci.intercept ({
     /**
      * Create User.  Must have unique email.  Password is hashed prior to storage.
      * @function create
@@ -29,28 +32,19 @@ module.exports = {
      * @arg {string} email Email must be unique (is used as login for account).
      * @returns {string} json User or Standard Error
      * @see createSchema for parameter validation
+     *   // req - http.IncomingMessage, res - http.ServerResponse
      */
     create: function (req, res) {
-        try {
-            var co = new ControllerOut (res)
-            var pm = req.params.all ()
-            pm ['firstName'] = StringUtil.cleanProperName (pm ['firstName'])
-            pm ['lastName'] = StringUtil.cleanProperName (pm ['lastName'])
+        var pm = new Params (req, createSchema)
+        pm.apply (['firstName', 'lastName'], StringUtil.cleanProperName)
 
-            // Delete added "id" field from params
-            delete pm ['id']
-
-            createSchema.validate (pm, function (e, value) { if (e) { e._code = "api.paramInvalid"; throw e } })
-        }
-        catch (e) {
-            return co.error (e)
-        }
+        var p = pm.validate ().getAll ()
 
         BCrypt.genSaltAsync (10)
-        .then (function (salt) { return BCrypt.hashAsync (pm.password, salt) })
-        .then (function (hash) { pm ['password'] = hash; return User.create (pm) })
-        .then (function (user) { return res.json (user) })
-        .catch (function (e) { return co.error (e) })
+        .then (function (salt) { return BCrypt.hashAsync (p.password, salt) })
+        .then (function (hash) { p ['password'] = hash; return { data: p } /*User.create (p)*/ })
+        .then (function (user) { res.json (user) })
+        .catch (function (e) { ci.error (res, e) })
     }
-};
+});
 
