@@ -1606,6 +1606,213 @@ OOP solution which is not invasive.  Also, although this seems related
 to "Aspect Oriented Programming (AOP)," we'll be doing something much simpler.
 
 So our first step is just to wrap what we currently have into an object.
+Let's look at the result of that transformation, as well as how we will
+use the new class.
+
+Our model will be to create a MethodInterceptor class, which is designed
+to be subclassed.  For now, we'll keep things simple and have a single
+"wrapper function" (which we'll call our interceptor function).  The
+subclass will provide this wrapper function.  In our particular case
+we are designing a single interception point that we can use for any
+purpose for a sails controller.  The first purpose is simply to catch
+any exceptions that exit the inner function and determine based on the
+exception what to return to the client (parameter invalid or 500 error).
+
+Note that we previously made the decision to return { data: {} } for
+success and { error: {} } on error, which is the simplest part of
+Google's JSON standard.  Thus we'll mostly be returning 200, even when
+there is an error, rather than attempt to map different error types
+to HTTP status codes.
+
+Also, for our particular subclass, we will want to use the singleton
+pattern, since we want to have a single object that all methods
+are routed through.  This will also allow us to accrete different
+functionality (complexity) at this level and put it into the class.
+for example we could add logging, performance metrics and special
+debugging code in this class.  This complexity would all be hidden
+in our singleton.
+
+Here is the base class `Local/MethodInterceptor.js`:
+```Javascript
+/**
+ * @module Local/MethodInterceptor.js
+ * @desc Utility object for intercepting/wrapping methods
+ */
+
+module.exports = MethodInterceptor
+
+function MethodInterceptor (interceptorFn) {
+    this.interceptorFn = interceptorFn
+}
+
+var Class = MethodInterceptor.prototype;
+
+Class.intercept = function (obj) {
+    for (var name in obj) {
+
+        // Only wrap local functions
+
+        if ( ! obj.hasOwnProperty (name) || typeof obj [name] !== 'function')
+            continue;
+
+        // fn is original function on the object, to wrap
+
+        var originalFn = obj [name];
+        var ifn = this.interceptorFn;
+
+        // set method on object to be our function wrapper, which gets
+        // the original function (fn), this, and arguments array
+
+        var interceptorObject = this;
+
+        obj [name] = function () {
+            return ifn.call (interceptorObject, originalFn, this, arguments)
+        }
+    }
+
+    return obj;
+}
+```
+And now here is the singleton subclass.  We don't have to derive this as a
+singleton (that is up to the inheriting class and has nothing to do with
+the parent MethodInterceptor class):
+
+The file `Local/SailsControllerInterceptorSingleton.js`:
+```Javascript
+/**
+ * @module Local/SailsControllerInterceptorSingleton.js
+ * @desc Singleton for all controllers.  Has a wrapper (interceptor)
+ *       function that can be easily hooked around all methods for
+ *       a Sails controller.
+ * @example
+ *
+ *     // get singleton ('new' optional)
+ *     var ci = SailsControllerInterceptorSingleton ();
+ *
+ *     // setup intercept on all methods of the object,
+ *     // and return the object
+ *     module.exports = ci.intercept ({
+ *         create: function (req, res) {
+ */
+
+var inherits = require ('util').inherits
+var MethodInterceptor = require ('Local/MethodInterceptor')
+var SymbolicError = require ('Local/SymbolicError')
+
+module.exports = _SailsControllerInterceptorSingleton;
+
+function SailsControllerInterceptorSingleton () {
+    MethodInterceptor.call (this, Class.controllerAction);
+}
+
+inherits (SailsControllerInterceptorSingleton, MethodInterceptor)
+
+var Class = SailsControllerInterceptorSingleton.prototype;
+
+/**
+ * Call this function to finish a controller method, e.g. from an error callback
+ * @example
+ * 
+ *     .then (function (user) { res.json (user) })
+ *     .catch (function (e) { ci.error (res, e) })  // <= call here with exception
+ */
+Class.error = function (res, e) {
+    // SymbolicErrors are designed to serialize correctly
+
+    if (e instanceof SymbolicError)
+        res.json ({ error: e });  // Google JSON standard => { error: } or { data: }
+    else
+        throw e; // Unhandled/unexpected exception
+}
+
+/**
+ * wrapper (interceptor) function
+ */
+Class.controllerAction = function (originalFn, originalThis, arguments) {
+    try {
+        var req = arguments [0];
+        var res = arguments [1];
+        originalFn.apply (originalThis, arguments)
+    } catch (e) {
+        this.error (res, e);
+    }
+}
+
+// ** Singleton pattern
+
+var _singleton = null
+
+function _SailsControllerInterceptorSingleton () {
+    if (_singleton === null)
+        _singleton = new SailsControllerInterceptorSingleton ();
+
+    return _singleton;
+}
+```
+Note that we eliminated the ControllerOut object.  There's no need for it
+anymore.
+
+Also note that we can easily reuse our MethodInterceptor on non-sails
+controllers.  Also, our current use of inheritance for this particular
+purpose seems slightly silly, even if "it works".  We're really just
+inheriting for the purpose of implementation.  There are a lot of ways
+we could do this that don't involve inheritance.  Also, in the case
+of a singleton, we're just after a holder object to organize
+new functionality for the generic controller functions we add.
+Having a singleton for this purpose with it's own module file accomplishes
+this.
+
+So it does feel a little like we are using inheritance in a slightly clunky
+way.  What would be better would be to make the following changes to our
+MethodInterceptor class:
+
+* In the constructor for MethodInterceptor, pass an interceptor
+  function, and a "this" (pointer to object) to be passed to the
+  interceptor.  This way we don't have to use inheritance, and
+  we can create as many of these as we need through composition.
+
+Let's make those changes and see how the code looks, as it shouldn't be
+that different.  The following changes were made:
+
+* Pass in a second argument to MethodInterceptor's constructor.  Use this
+  in the wrapper as the 'this' argument to the interceptor function.
+  This allows us to have the interceptor act like a method on the
+  parent object (in this case SailsControllerInterceptorSingleton.js).
+
+* We need to expose the intercept function since we are no longer
+  getting that through inheritance.
+
+* We'll add an example to the comments for MethodInterceptor.
+
+* The name and function of SailsControllerInterceptorSingleton no longer
+  fit.  This seemed the case as we were thinking of this object to
+  be a shared context object for all controller methods.  So we'll
+  change the name to `SailsControllerSingleton`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TODO - show that and talk about it
+
+## IDE - IntelliJ Ultimate
+
+
+
+
+
+
+
 
 
 ## References

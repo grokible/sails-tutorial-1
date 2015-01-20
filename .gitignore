@@ -119,6 +119,9 @@ nbproject
 .idea
 .node_history
 
+## Our local scratch directory
+scratch
+
 ################################################
 # Documentation 
 # 
@@ -130,4 +133,4 @@ doc/*
 !doc/markdown
 
 
-scratch
+
