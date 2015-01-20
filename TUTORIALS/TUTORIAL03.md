@@ -1,6 +1,6 @@
 # TUTORIAL03
 
-## Overview:  Going Deeper
+## Overview:  Prototypal Inheritance and OOP Design from First Principles
 
 In the previous tutorial we dug into the specifics of the controller to enhance the
 backend logic using some helpful libraries and techniques, among them bluebird (Promises)
@@ -2050,17 +2050,5 @@ has resulted in deeper understanding.  Here are some of the things we've covered
 * [Kangax ECMAScript 5 Implementation Support/Availability](http://kangax.github.io/compat-table/es5/)
 * [Mozilla Developer JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [ECMASCript 5.1 specification, ECMA-262/5.1](http://www.ecma-international.org/ecma-262/5.1/)
-
-
-
-
-
-
-
-
-
-
-
-
 
 

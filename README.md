@@ -197,6 +197,41 @@ To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.5`
 * [Joi Validation Library API](https://www.npmjs.com/package/joi)
 * [NPM script field documentation](https://docs.npmjs.com/misc/scripts)
 
+### Tutorial 02
+
+Take a look at [TUTORIAL03.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL03.md).
+You'll learn:
+
+* Standardizing on ECMAScript 5.1 and some of the details of what that means.
+* Understand the basic mechanisms for prototypal inheritance.
+* Apply prototypal inheritance mechanisms to construct some reliable classical
+  OOP patterns:  inheritance, private implementation details, singletons.
+* Demonstrating OOP properties using simple assert tests.
+* Several methods of insulating our classes private implementation details
+  including class level static variables, and ES6 Symbol for instance variables.
+* Apply our new OOP patterns to solve some basic object problems for our own
+  Error class, and some other classes which make working with Sails controllers
+  simple.
+* Investigation, critique and adjustments/enhancements to some of these OOP
+  patterns.
+* Intermediate Javascript patterns that rely on functions as first class objects,
+  such as the "interception pattern".
+* Use of the interception pattern to provide a "missing hook" in the Sails
+  controller design.  This allowed us to create our own wrapper for any
+  controller.
+* Howto use the IntelliJ IDEs (Ultimate or WebStorm) to do basic interactive
+  debugging both for browser interception and unit tests.
+
+To Start: `git checkout -b new_branch_name tutorial.02.5` and then follow [TUTORIAL03.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL03.md).
+To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.03.1`
+
+**References:**
+
+* [Wikipedia ECMAScript Version History](http://en.wikipedia.org/wiki/JavaScript#Version_history)
+* [Mozilla JavaScript Implementation History](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript)
+* [Kangax ECMAScript 5 Implementation Support/Availability](http://kangax.github.io/compat-table/es5/)
+* [Mozilla Developer JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+* [ECMASCript 5.1 specification, ECMA-262/5.1](http://www.ecma-international.org/ecma-262/5.1/)
 
 ## Bon Voyage
 
