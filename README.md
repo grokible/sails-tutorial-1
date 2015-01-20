@@ -35,6 +35,12 @@ pragmatic and pithy examples, pointing out interesting issues.
 Also, there are essentially step-by-step instructions to help you exercise
 "muscle memory."
 
+Also, this is a learning experience for me as well, so I'll definitely
+make some mistakes along the way.  But you'll benefit from my inquiry
+as a good programmer, who is a novice in another language/culture.
+Also, this isn't my first rodeo, so the conventions I arrive at should
+be pretty good.
+
 ## Sails.js Tutorial and More
 
 I created this tutorial to help me learn Sails.js as well as advance my knowledge
@@ -197,7 +203,7 @@ To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.02.5`
 * [Joi Validation Library API](https://www.npmjs.com/package/joi)
 * [NPM script field documentation](https://docs.npmjs.com/misc/scripts)
 
-### Tutorial 02
+### Tutorial 03
 
 Take a look at [TUTORIAL03.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL03.md).
 You'll learn:
@@ -225,7 +231,7 @@ You'll learn:
   libraries and Sails enhancements.
 
 To Start: `git checkout -b new_branch_name tutorial.02.5` and then follow [TUTORIAL03.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL03.md).
-To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.03.1`
+To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.03.2`
 
 **References:**
 
