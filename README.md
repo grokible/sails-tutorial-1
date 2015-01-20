@@ -221,6 +221,8 @@ You'll learn:
   controller.
 * Howto use the IntelliJ IDEs (Ultimate or WebStorm) to do basic interactive
   debugging both for browser interception and unit tests.
+* Clean and well thought-out conventions for controller code, and for our own OOP
+  libraries and Sails enhancements.
 
 To Start: `git checkout -b new_branch_name tutorial.02.5` and then follow [TUTORIAL03.md](https://github.com/grokible/sails-tutorial-1/blob/master/TUTORIALS/TUTORIAL03.md).
 To Get Finished Tutorial State: `git checkout -b new_branch_name tutorial.03.1`

@@ -2042,6 +2042,8 @@ has resulted in deeper understanding.  Here are some of the things we've covered
   controller.
 * Howto use the IntelliJ IDEs (Ultimate or WebStorm) to do basic interactive
   debugging both for browser interception and unit tests.
+* Clean and well thought-out conventions for controller code, and for our own OOP
+  libraries and Sails enhancements.
 
 ## References
 
