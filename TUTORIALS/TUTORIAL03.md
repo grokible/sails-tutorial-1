@@ -8,20 +8,6 @@ and Joi (validation).  We also got into more detail on the Waterline ORM, for CR
 and single table operations.  In addition we created some of our own helper modules
 using the module and prototype patterns.
 
-TODO
-----
-1. Cleanup some of our wrapper libraries from last time and add proper error handling.
-   1. Brief Javascript refresher.
-2. Develop a simple mock framework for testing endpoints in unit tests, rather than
-   using the integration approach.
-3. Implementation:  Create a user, login a user, roles.
-   1. Multi-table joins with Waterline.
-   2. Multiple services.
-   3. Express.io, Socket.io
-4. HTTPS config.
-5. Passport?
-5. Applying it all together.
-
 ## Toward Clean Conventions
 
 In addition to learning how to use all the various libraries properly, one aim we
@@ -207,7 +193,6 @@ The next few sections go over, in gory detail, how Javascript's prototypal
 inheritance mechanisms work.  If you're already familiar with constructor
 functions, prototype and __proto__, and the inherits function, you may want to
 skip ahead to the section "Prototypal Inheritance Class Pattern".
-
 
 ## Brief Protoypal Inheritance Primer
 
@@ -1789,31 +1774,274 @@ that different.  The following changes were made:
   be a shared context object for all controller methods.  So we'll
   change the name to `SailsControllerContext`.
 
+Here is the new version of `Local/MethodInterceptor.js`:
+```Javascript
+/**
+ * @module Local/MethodInterceptor.js
+ * @desc Utility object for intercepting/wrapping methods
+ * @example
+ *
+ *     // Here's an OOP way to do things:
+ *
+ *     function SomeConstructor () {
+ *         this.interceptor = new MethodInterceptor
+ *             (SomeConstructor.prototype.wrapper, this);
+ *     }
+ *
+ *     // This function is the "interceptor" (wrapper) function.  It
+ *     // doesn't automatically call the wrapped function (we must do it ourselves).
+ *
+ *     SomeConstructor.prototype.wrapper = function (originalFn, originalThis, arguments) {
+ *         // N.B. 'this' will be set to the second arg of the MethodInterceptor
+ *         // constructor.  We passed in "this" so this will behave like an OOP method.
+ *         // But the second arg can be anything, including null (optional context).
+ *       
+ *         // You should call the original function like this:
+ *
+ *         originalFn.apply (originalThis, arguments)
+ *     }
+ */
 
+module.exports = MethodInterceptor
 
+/**
+ * Constructor.
+ * @arg {function} interceptorFn is the function that wraps the original function.
+ * @arg {object} optContextObject is optional object passed into the wrapper function.
+ */
+function MethodInterceptor (interceptorFn, optContextObject) {
+    this.interceptorFn = interceptorFn
+    this.contextObject = optContextObject ? optContextObject : null
+}
 
+var Class = MethodInterceptor.prototype;
 
+Class.intercept = function (obj) {
+    for (var name in obj) {
 
+        // Only wrap local functions
 
+        if ( ! obj.hasOwnProperty (name) || typeof obj [name] !== 'function')
+            continue;
 
+        // fn is original function on the object, to wrap
 
+        var originalFn = obj [name];
+        var ifn = this.interceptorFn;
 
+        // set method on object to be our function wrapper, which gets
+        // the original function (fn), optContextObject as 'this', and arguments array
 
+        obj [name] = function () {
+            return ifn.call (this.optContextObject, originalFn, this, arguments)
+        }
+    }
 
+    return obj;
+}
+```
+Here is the new singleton, which we've renamed to `Local/SailsControllerContext.js`:
+```Javascript
+/**
+ * @module Local/SailsControllerContext.js
+ * @desc Singleton for all controllers.  Has a wrapper (interceptor)
+ *       function that can be easily hooked around all methods for
+ *       a Sails controller.
+ * @example
+ *
+ *     // get singleton ('new' optional)
+ *     var ci = SailsControllerContext ();
+ *
+ *     // setup intercept on all methods of the object,
+ *     // and return the object
+ *     module.exports = ci.intercept ({
+ *         create: function (req, res) {
+ */
 
+var MethodInterceptor = require ('Local/MethodInterceptor')
+var SymbolicError = require ('Local/SymbolicError')
 
+module.exports = _SailsControllerContext;
 
-TODO - show that and talk about it
+var interceptor = null
 
-## IDE - IntelliJ Ultimate
+function SailsControllerContext () {
+    interceptor = new MethodInterceptor (Class.controllerAction, this);
+}
 
+var Class = SailsControllerContext.prototype;
 
+/**
+ * Call this function to finish a controller method, e.g. from an error callback
+ * @example
+ * 
+ *     .then (function (user) { res.json (user) })
+ *     .catch (function (e) { ci.error (res, e) })  // <= call here with exception
+ */
+Class.error = function (res, e) {
+    // SymbolicErrors are designed to serialize correctly
 
+    if (e instanceof SymbolicError)
+        res.json ({ error: e });  // Google JSON standard => { error: } or { data: }
+    else
+        throw e; // Unhandled/unexpected exception
+}
 
+/**
+ * wrapper (interceptor) function
+ */
+Class.controllerAction = function (originalFn, originalThis, arguments) {
+    try {
+        var req = arguments [0];
+        var res = arguments [1];
 
+        // Call original intercepted (wrapped) function
 
+        originalFn.apply (originalThis, arguments)
+    } catch (e) {
+        this.error (res, e);
+    }
+}
 
+// Expose the interceptor function
 
+Class.intercept = function (obj) { return interceptor.intercept (obj) }
+
+// ** Singleton pattern
+
+var _singleton = null
+
+function _SailsControllerContext () {
+    if (_singleton === null)
+        _singleton = new SailsControllerContext ();
+
+    return _singleton;
+}
+```
+We also must make changes to `api/controllers/UserController.js` since we
+changed the name (exercise left to the reader).
+
+## Using an IDE - IntelliJ Ultimate
+
+We haven't discussed using an IDE, and quite frankly, I've been using a text editor
+running from the command-line, just to get the feel of things.  We've been adding
+to the unit tests as we go (see the checked in github code...we didn't go over it
+in the tutorial), which helps guarantee code quality.
+
+At this point our code is starting to get more complex and we could use the help
+of an Integrated Development Environment (IDE).  For this I chose IntelliJ's
+Ultimate IDE, which handles multiple languages.  I've been very impressed by
+how well it works with Java and PHP, that it seems like a natural for Javascript.
+
+There were 3 goals I had for using the IDE initially:
+
+* Be able to edit files.
+* Be able to interactively step through code in the debugger.  This will typically
+  be in response to catching a request from the browser or Postman.
+* Be able to interactively run and step through the mocha unit tests.
+
+IntelliJ performed admirably, but lacked one thing that would have been nice
+which was ability to halt the debugger based on exception type.  Version 14.0.2
+does not have any of this type of feature (whereas for Java this is very extensive).
+Note that the stripped down web IDE they offer, WebStorm, does have exception
+halting, but only in rudimentary fashion.  It's possible this is a little
+nebulous since the concept of types in Javascript is so fluid.
+
+Here are the steps that I took to reach my goals:
+
+* Create a new project with the top-level app directory as the project directory.
+  This creates a hidden directory `.idea` which is already in .gitignore.
+* Create a "Run Configuration" from the menu Run:Edit Configurations...
+  A run configuration is a macro that will start a program or server.
+  I selected the "Node.js" type (click + to create a new one and edit),
+  and named it "Start Node: sails debug".  Below are the attributes
+  of the dialog.  Note what is given is equivalent to running "sails debug" from
+  the command-line, which starts sails in debug mode.
+  * Node interpreter: /usr/local/bin/node (defaulted)
+  * Node parameters: <blank>
+  * Working directory:  /Users/rogerbush8/Documents/workspace/sails/sails-tutorial-1 (defaulted)
+  * JavaScript file: /usr/local/lib/node_modules/sails/bin/sails.js
+  * Application parameters: debug
+* We need a separate debug configuration that lets us attach to a node
+  server running in debug mode (i.e. with debug port 5858).  I created a configuration
+  starting from the Node.js remote debug (we attach to an already running
+  Node server, that is local, but this could work for remote as well).  I called
+  this "Attach debugger to local Node.js server" Here are the parameters:
+  * Host: 127.0.0.1 (defaulted)
+  * Port: 5858 (defaulted)
+
+In addition, I had to go to menu Preferences:Build,Execution,Deployment:Debugger:Stepping
+and uncheck both "Do not step into library scripts" and "Do not step into scripts" which
+were both checked.  This prevented "step into" from working since most things I was
+debugging fell into one of these categories ("force step into" does work initially though).
+
+Next I did the following:
+
+* Open UserController.js and add a breakpoint in create.
+* Selected Run => Start Node: sails debug (our new run config).
+* Selected Debug => "Attach debugger to local Node.js server".
+* Launched a call from the browser to create (e.g. http://localhost:1337/user/create?...)
+
+This stopped at the breakpoint.
+
+Another thing that was very useful was setting up a Run configuration for
+the Mocha scripts.  There is a starter configuration for Mocha that you can
+select, in menu Run:Edit Configurations... Start with Mocha.  I called mine
+"Mocha all tests".  Here are the parameters:
+
+* Node interpreter: /usr/local/bin/node (defaulted)
+* Node options: <blank>
+* Working directory: /Users/rogerbush8/Documents/workspace/sails/sails-tutorial-1
+* Environment variables: <blank>
+* Mocha package: /usr/local/lib/node_modules/mocha (defaulted)
+* Test directory: /Users/rogerbush8/Documents/workspace/sails/sails-tutorial-1/tests
+* check "Include sub directories"
+
+This worked very well.  Running the "Mocha all tests" configuration runs all
+the tests, and has a very nice graphical display in console.  You can put breakpoints
+in tests and execution will halt.
+
+Note that as of writing this, IntelliJ has two different IDE products that are relevant
+for Node:  IntelliJ Ultimate 14 and WebStorm 9.  WebStorm 9 actually had more up-to-date
+Node features than IntelliJ Ultimate, which I would guess will eventually be merged
+back into that product.  Here were two interesting features in WebStorm 9 that were
+not in Ultimate 14:
+
+* Ability to halt on exceptions (I could not get this to work immediately, so I
+  need to dig through some online docs).
+* Live Edit for Node.js - WebStorm will automatically update your Node.js
+  application and restart Node.js server on any changes.  The way this works is
+  Live Edit will try to update the app using "hotswap" and if this fails it
+  will restart Node.js.
+
+Note that the instructions above for setting up the run and debug configurations
+are exactly the same, and the .idea files are the same as well, so one can switch
+between both IDEs.
+
+## Conclusion
+
+Once again, we've taken a pretty long path to get to where we are, but hopefully it
+has resulted in deeper understanding.  Here are some of the things we've covered:
+
+* Standardizing on ECMAScript 5.1 and some of the details of what that means.
+* Understand the basic mechanisms for prototypal inheritance.
+* Apply prototypal inheritance mechanisms to construct some reliable classical
+  OOP patterns:  inheritance, private implementation details, singletons.
+* Demonstrating OOP properties using simple assert tests.
+* Several methods of insulating our classes private implementation details
+  including class level static variables, and ES6 Symbol for instance variables.
+* Apply our new OOP patterns to solve some basic object problems for our own
+  Error class, and some other classes which make working with Sails controllers
+  simple.
+* Investigation, critique and adjustments/enhancements to some of these OOP
+  patterns.
+* Intermediate Javascript patterns that rely on functions as first class objects,
+  such as the "interception pattern".
+* Use of the interception pattern to provide a "missing hook" in the Sails
+  controller design.  This allowed us to create our own wrapper for any
+  controller.
+* Howto use the IntelliJ IDEs (Ultimate or WebStorm) to do basic interactive
+  debugging both for browser interception and unit tests.
 
 ## References
 
