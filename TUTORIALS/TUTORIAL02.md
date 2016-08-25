@@ -838,8 +838,8 @@ Most of the documentation can be found via drill-down to the "Table of Contents"
 
 We'll be mostly using information from these two sources:
 
-* [Queries](https://github.com/balderdashy/waterline-docs/blob/master/query.md)
-* [Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/query-methods.md)
+* [Queries](https://github.com/balderdashy/waterline-docs/blob/master/queries/query.md)
+* [Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/queries/query-methods.md)
 
 We are interested now in learning the basics:
 
@@ -1078,7 +1078,7 @@ sails> null { firstName: 'Roger',
 Note that the documentation shows there are a variety of forms for the first argument
 (the query) that this function will take.  Let's look at the documentation for find:
 
-* [Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/query-methods.md)
+* [Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/queries/query-methods.md)
 
 Note that in most of the calls, including find, the first argument is the "Find Criteria", and
 will accept the data types `{}, [{}], string, int` (also [string] and [int] are accepted).  Note
@@ -1107,7 +1107,7 @@ a list in an outer enclosing array (the meaning at this level is logical OR).
 
 By combining each of these ideas and the available operators, all complicated predicates
 may be formed.  More details can be found in the
-[query language docs](https://github.com/balderdashy/waterline-docs/blob/master/query-language.md).
+[query language docs](https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md).
 
 Note we can also pass any array of strings or numbers and this will be interpreted as an
 in-list for the id:
@@ -1982,9 +1982,9 @@ We'll be doing all of these things in the next tutorials.
 * [Detailed sails.config reference](http://sailsjs.org/#/documentation/reference/sails.config)
 * [Introduction to Waterline](http://sailsjs.org/#/documentation/concepts/ORM)
 * [Github Waterline project docs](https://github.com/balderdashy/waterline-docs).
-* [Waterline Queries](https://github.com/balderdashy/waterline-docs/blob/master/query.md)
-* [Waterline Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/query-methods.md)
-* [Waterline query language docs](https://github.com/balderdashy/waterline-docs/blob/master/query-language.md)
+* [Waterline Queries](https://github.com/balderdashy/waterline-docs/blob/master/queries/query.md)
+* [Waterline Query Methods (CRUD)](https://github.com/balderdashy/waterline-docs/blob/master/queries/query-methods.md)
+* [Waterline query language docs](https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md)
 * [Mocha Testing Framework docs](http://mochajs.org/)
 * [Joi Validation Library API](https://www.npmjs.com/package/joi)
 * [NPM script field documentation](https://docs.npmjs.com/misc/scripts)
